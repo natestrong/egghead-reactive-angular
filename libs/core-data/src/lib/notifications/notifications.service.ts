@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
+import {Injectable} from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Injectable()
 export class NotificationsService {
@@ -8,6 +8,6 @@ export class NotificationsService {
   }
 
   emit(notification) {
-    this.snackbar.open(notification, 'OK', { duration: 3000 });
+    this.snackbar.open(notification, 'OK', {duration: 3000});
   }
 }
