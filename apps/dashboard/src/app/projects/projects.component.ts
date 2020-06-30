@@ -6,7 +6,7 @@ import {
   ProjectsService,
   NotificationsService,
   CustomersService,
-  ProjectsState, AddProject, UpdateProject, DeleteProject
+  ProjectsState, AddProject, UpdateProject, DeleteProject, LoadProjects, initialProjects
 } from '@workshop/core-data';
 import {select, Store} from "@ngrx/store";
 import {map, tap} from "rxjs/operators";
@@ -38,7 +38,9 @@ export class ProjectsComponent implements OnInit {
   ) {
     this.projects$ = store.pipe(
       select('projects'),
-      map((p: ProjectsState) => p.projects)
+      map(data => data.entities),
+      map(data => Object.keys(data).map(k => data[k])),
+      tap(console.log)
     )
   }
 
@@ -65,7 +67,7 @@ export class ProjectsComponent implements OnInit {
   }
 
   getProjects() {
-    // this.projects$ = this.projectsService.all();  // for now
+    this.store.dispatch(new LoadProjects(initialProjects))
   }
 
   saveProject(project) {
@@ -77,11 +79,12 @@ export class ProjectsComponent implements OnInit {
   }
 
   createProject(project) {
-    this.store.dispatch(new AddProject(project))
+    const newProject = new AddProject(project)
+    console.log(newProject)
+    this.store.dispatch(newProject)
 
     // todo - get rid of this
     this.ns.emit('Project created!');
-    this.getProjects();
   }
 
   updateProject(project) {
@@ -89,15 +92,13 @@ export class ProjectsComponent implements OnInit {
 
     // todo - get rid of this
     this.ns.emit('Project saved!');
-    this.getProjects();
   }
 
   deleteProject(project) {
-    this.store.dispatch(new DeleteProject(project))
+    this.store.dispatch(new DeleteProject(project.id))
 
     // todo - get rid of this
     this.ns.emit('Project deleted!');
-    this.getProjects();
   }
 }
 
