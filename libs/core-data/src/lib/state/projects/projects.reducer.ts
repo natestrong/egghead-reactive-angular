@@ -1,4 +1,5 @@
 import {Project} from '@workshop/core-data';
+import {ProjectsActionTypes} from "./projects.actions";
 
 const initialProjects: Project[] = [
   {
@@ -48,23 +49,23 @@ export const initialState: ProjectsState = {
 // 03 Build a simple reducer
 export function projectsReducer(state = initialState, action): ProjectsState {
   switch (action.type) {
-    case 'select':
+    case ProjectsActionTypes.ProjectSelected:
       return {
         selectedProjectId: action.payload,
         projects: state.projects
       }
-    case 'create':
+    case ProjectsActionTypes.AddProject:
       return {
         selectedProjectId: state.selectedProjectId,
         projects: createProject(state.projects, action.payload)
       }
-    case 'update':
-            return {
+    case ProjectsActionTypes.UpdateProject:
+      return {
         selectedProjectId: state.selectedProjectId,
         projects: updateProject(state.projects, action.payload)
       }
-    case 'delete':
-            return {
+    case ProjectsActionTypes.DeleteProject:
+      return {
         selectedProjectId: state.selectedProjectId,
         projects: deleteProject(state.projects, action.payload)
       }
